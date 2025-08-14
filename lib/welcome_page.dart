@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:metro2/input_page.dart';
 
 class WelcomePage extends StatelessWidget {
   const WelcomePage({super.key});
@@ -53,7 +55,9 @@ class WelcomePage extends StatelessWidget {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Color(0xFFc41014),
                           ),
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.to(() => InputPage());
+                          },
                           label: Text(
                             'Get Started',
                             style: TextStyle(color: Colors.white),
