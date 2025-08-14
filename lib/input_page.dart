@@ -96,12 +96,20 @@ class InputPage extends StatelessWidget {
   List<List<String>> routes = [];
   final entryCont = TextEditingController();
   final DestinationCont = TextEditingController();
+  final addressCont = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: Text('Metro guide', style: TextStyle(color: Colors.white)),
+        title: Text(
+          'Metro Guide',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 26,
+          ),
+        ),
         backgroundColor: Color(0xFFc41014),
       ),
       body: SafeArea(
@@ -113,8 +121,8 @@ class InputPage extends StatelessWidget {
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
-                  'Enter the entry point',
-                  style: TextStyle(fontSize: 20),
+                  'Enter the Entry point',
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
               DropdownMenu(
@@ -177,7 +185,7 @@ class InputPage extends StatelessWidget {
                   padding: const EdgeInsets.only(top: 8),
                   child: Text(
                     'Enter the Destination point',
-                    style: TextStyle(fontSize: 20),
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -249,7 +257,7 @@ class InputPage extends StatelessWidget {
                       if (routes.isNotEmpty) {
                         final minRoute = routes.minBy((route) => route.length)!;
                         count.value =
-                            ' Number of stations : ${Metro().stationCount(minRoute)}';
+                            'Number of stations : ${Metro().stationCount(minRoute)}';
                         time.value =
                             'Estimated time : ${Metro().expectedTimeMin(minRoute)}';
                         price.value = 'Price : ${Metro().fareEGP(minRoute)}';
@@ -260,7 +268,7 @@ class InputPage extends StatelessWidget {
                       backgroundColor: Color(0xFFc41014),
                     ),
                     child: Text(
-                      'show',
+                      'Show',
                       style: TextStyle(color: Colors.white, fontSize: 20),
                     ),
                   ),
@@ -306,13 +314,112 @@ class InputPage extends StatelessWidget {
               Obx(() {
                 return Visibility(
                   visible: show.value,
-                  child: ElevatedButton.icon(
-                    onPressed: () {},
-                    label: Text('See more'),
-                    icon: Icon(Icons.chevron_right),
+                  child: Align(
+                    alignment: Alignment.topRight,
+                    child: ElevatedButton.icon(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Color(0xFFc41014),
+                      ),
+                      onPressed: () {},
+                      label: Text(
+                        'See more',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      icon: Icon(Icons.chevron_right, color: Colors.white),
+                    ),
                   ),
                 );
               }),
+              Spacer(),
+              Column(
+                spacing: 16,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 32),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFc41014),
+                            ),
+                            onPressed: () {},
+                            child: Text(
+                              'Nearest Station',
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Text(''),
+                      ],
+                    ),
+                  ),
+                  TextField(
+                    controller: addressCont,
+                    decoration: InputDecoration(
+                      labelText: 'Address',
+                      labelStyle: TextStyle(color: Color(0xFFc41014)),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFc41014),
+                          width: 1.5,
+                        ),
+                      ),
+                      // inputDecorationTheme: InputDecorationTheme(
+                      //   filled: true,
+                      //   fillColor: Colors.white,
+                      //   contentPadding: const EdgeInsets.symmetric(
+                      //     vertical: 12,
+                      //     horizontal: 16,
+                      //   ),),
+                      //   border: OutlineInputBorder(
+                      //     borderRadius: BorderRadius.circular(12),
+                      //     borderSide: const BorderSide(
+                      //       color: Color(0xFFc41014),
+                      //       width: 1.5,
+                      //     ),
+                      //   ),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFc41014),
+                          width: 1.5,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: const BorderSide(
+                          color: Color(0xFFc41014),
+                          width: 2,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Color(0xFFc41014),
+                        ),
+                        onPressed: () {},
+                        child: Text(
+                          'Show Station',
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        ),
+                      ),
+                      Text(""),
+                    ],
+                  ),
+                ],
+              ),
             ],
           ),
         ),
