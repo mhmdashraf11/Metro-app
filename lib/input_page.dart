@@ -113,314 +113,343 @@ class InputPage extends StatelessWidget {
         backgroundColor: Color(0xFFc41014),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Column(
-            spacing: 8,
-            children: [
-              Align(
-                alignment: Alignment.topLeft,
-                child: Text(
-                  'Enter the Entry point',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                ),
-              ),
-              DropdownMenu(
-                controller: entryCont,
-                enableFilter: true,
-                enableSearch: true,
-                requestFocusOnTap: true,
-                hintText: 'Start Point',
-                menuHeight: 300,
-                width: double.infinity,
-                dropdownMenuEntries: [
-                  for (var station in stations)
-                    DropdownMenuEntry(value: station.name, label: station.name),
-                ],
-                inputDecorationTheme: InputDecorationTheme(
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFc41014),
-                      width: 1.5,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFc41014),
-                      width: 1.5,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFc41014),
-                      width: 2,
-                    ),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              spacing: 8,
+              children: [
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Text(
+                    'Enter the Entry point',
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-                menuStyle: MenuStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
+                DropdownMenu(
+                  controller: entryCont,
+                  enableFilter: true,
+                  enableSearch: true,
+                  requestFocusOnTap: true,
+                  hintText: 'Start Point',
+                  menuHeight: 300,
+                  width: double.infinity,
+                  dropdownMenuEntries: [
+                    for (var station in stations)
+                      DropdownMenuEntry(
+                        value: station.name,
+                        label: station.name,
+                      ),
+                  ],
+                  inputDecorationTheme: InputDecorationTheme(
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFc41014),
                         width: 1.5,
                       ),
                     ),
-                  ),
-                ),
-              ),
-              Align(
-                alignment: Alignment.topLeft,
-                child: Padding(
-                  padding: const EdgeInsets.only(top: 8),
-                  child: Text(
-                    'Enter the Destination point',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              DropdownMenu(
-                controller: DestinationCont,
-                menuHeight: 300,
-                enableFilter: true,
-                enableSearch: true,
-                requestFocusOnTap: true,
-                hintText: 'End Point',
-                width: double.infinity,
-                dropdownMenuEntries: [
-                  for (var station in stations)
-                    DropdownMenuEntry(value: station.name, label: station.name),
-                ],
-                inputDecorationTheme: InputDecorationTheme(
-                  filled: true,
-                  fillColor: Colors.white,
-                  contentPadding: const EdgeInsets.symmetric(
-                    vertical: 12,
-                    horizontal: 16,
-                  ),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFc41014),
-                      width: 1.5,
-                    ),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFc41014),
-                      width: 1.5,
-                    ),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(12),
-                    borderSide: const BorderSide(
-                      color: Color(0xFFc41014),
-                      width: 2,
-                    ),
-                  ),
-                ),
-                menuStyle: MenuStyle(
-                  backgroundColor: MaterialStateProperty.all(Colors.white),
-                  shape: MaterialStateProperty.all(
-                    RoundedRectangleBorder(
+                    enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
-                      side: const BorderSide(
+                      borderSide: const BorderSide(
                         color: Color(0xFFc41014),
-                        width: 3,
+                        width: 1.5,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFc41014),
+                        width: 2,
+                      ),
+                    ),
+                  ),
+                  menuStyle: MenuStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(
+                          color: Color(0xFFc41014),
+                          width: 1.5,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      routes = Metro().allRoutes(
-                        entryCont.text,
-                        DestinationCont.text,
-                      );
-                      if (routes.isNotEmpty) {
-                        final minRoute = routes.minBy((route) => route.length)!;
-                        count.value =
-                            'Number of stations : ${Metro().stationCount(minRoute)}';
-                        time.value =
-                            'Estimated time : ${Metro().expectedTimeMin(minRoute)}';
-                        price.value = 'Price : ${Metro().fareEGP(minRoute)}';
-                        show.value = true;
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFFc41014),
-                    ),
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 8),
                     child: Text(
-                      'Show',
-                      style: TextStyle(color: Colors.white, fontSize: 20),
+                      'Enter the Destination point',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Obx(() {
-                return Align(
-                  alignment: Alignment.center,
-                  child: Card(
-                    // color: Colors.red.shade50,
-                    color: Color(0xFFF5F5F5),
-                    // color: Colors.grey[200],
-                    child: Column(
-                      // crossAxisAlignment: CrossAxisAlignment.start,
-                      // mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        if (count.value != '')
-                          Row(
-                            children: [
-                              Icon(Icons.train),
-                              Text(count.value, style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                        if (time.value != '')
-                          Row(
-                            children: [
-                              Icon(Icons.timer),
-                              Text(time.value, style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                        if (price.value != '')
-                          Row(
-                            children: [
-                              Icon(Icons.attach_money),
-                              Text(price.value, style: TextStyle(fontSize: 20)),
-                            ],
-                          ),
-                      ],
+                DropdownMenu(
+                  controller: DestinationCont,
+                  menuHeight: 300,
+                  enableFilter: true,
+                  enableSearch: true,
+                  requestFocusOnTap: true,
+                  hintText: 'End Point',
+                  width: double.infinity,
+                  dropdownMenuEntries: [
+                    for (var station in stations)
+                      DropdownMenuEntry(
+                        value: station.name,
+                        label: station.name,
+                      ),
+                  ],
+                  inputDecorationTheme: InputDecorationTheme(
+                    filled: true,
+                    fillColor: Colors.white,
+                    contentPadding: const EdgeInsets.symmetric(
+                      vertical: 12,
+                      horizontal: 16,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFc41014),
+                        width: 1.5,
+                      ),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFc41014),
+                        width: 1.5,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: const BorderSide(
+                        color: Color(0xFFc41014),
+                        width: 2,
+                      ),
                     ),
                   ),
-                );
-              }),
-              Obx(() {
-                return Visibility(
-                  visible: show.value,
-                  child: Align(
-                    alignment: Alignment.topRight,
-                    child: ElevatedButton.icon(
+                  menuStyle: MenuStyle(
+                    backgroundColor: MaterialStateProperty.all(Colors.white),
+                    shape: MaterialStateProperty.all(
+                      RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        side: const BorderSide(
+                          color: Color(0xFFc41014),
+                          width: 3,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        routes = Metro().allRoutes(
+                          entryCont.text,
+                          DestinationCont.text,
+                        );
+                        if (routes.isNotEmpty) {
+                          final minRoute = routes.minBy(
+                            (route) => route.length,
+                          )!;
+                          count.value =
+                              'Number of stations : ${Metro().stationCount(minRoute)}';
+                          time.value =
+                              'Estimated time : ${Metro().expectedTimeMin(minRoute)}';
+                          price.value = 'Price : ${Metro().fareEGP(minRoute)}';
+                          show.value = true;
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFc41014),
                       ),
-                      onPressed: () {},
-                      label: Text(
-                        'See more',
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        'Show',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
                       ),
-                      icon: Icon(Icons.chevron_right, color: Colors.white),
                     ),
                   ),
-                );
-              }),
-              Spacer(),
-              Column(
-                spacing: 16,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 32),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: Color(0xFFc41014),
+                ),
+                Obx(() {
+                  return Align(
+                    alignment: Alignment.center,
+                    child: Card(
+                      // color: Colors.red.shade50,
+                      color: Color(0xFFF5F5F5),
+                      // color: Colors.grey[200],
+                      child: Column(
+                        // crossAxisAlignment: CrossAxisAlignment.start,
+                        // mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          if (count.value != '')
+                            Row(
+                              children: [
+                                Icon(Icons.train),
+                                Text(
+                                  count.value,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
                             ),
-                            onPressed: () {},
-                            child: Text(
-                              'Nearest Station',
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.white,
-                              ),
+                          if (time.value != '')
+                            Row(
+                              children: [
+                                Icon(Icons.timer),
+                                Text(
+                                  time.value,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
                             ),
-                          ),
-                        ),
-                        Text(''),
-                      ],
-                    ),
-                  ),
-                  TextField(
-                    controller: addressCont,
-                    decoration: InputDecoration(
-                      labelText: 'Address',
-                      labelStyle: TextStyle(color: Color(0xFFc41014)),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFc41014),
-                          width: 1.5,
-                        ),
-                      ),
-                      // inputDecorationTheme: InputDecorationTheme(
-                      //   filled: true,
-                      //   fillColor: Colors.white,
-                      //   contentPadding: const EdgeInsets.symmetric(
-                      //     vertical: 12,
-                      //     horizontal: 16,
-                      //   ),),
-                      //   border: OutlineInputBorder(
-                      //     borderRadius: BorderRadius.circular(12),
-                      //     borderSide: const BorderSide(
-                      //       color: Color(0xFFc41014),
-                      //       width: 1.5,
-                      //     ),
-                      //   ),
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFc41014),
-                          width: 1.5,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: const BorderSide(
-                          color: Color(0xFFc41014),
-                          width: 2,
-                        ),
+                          if (price.value != '')
+                            Row(
+                              children: [
+                                Icon(Icons.attach_money),
+                                Text(
+                                  price.value,
+                                  style: TextStyle(fontSize: 20),
+                                ),
+                              ],
+                            ),
+                        ],
                       ),
                     ),
-                  ),
-
-                  Row(
-                    children: [
-                      ElevatedButton(
+                  );
+                }),
+                Obx(() {
+                  return Visibility(
+                    visible: show.value,
+                    child: Align(
+                      alignment: Alignment.topRight,
+                      child: ElevatedButton.icon(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Color(0xFFc41014),
                         ),
                         onPressed: () {},
-                        child: Text(
-                          'Show Station',
-                          style: TextStyle(fontSize: 20, color: Colors.white),
+                        label: Text(
+                          'See more',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        icon: Icon(Icons.chevron_right, color: Colors.white),
+                      ),
+                    ),
+                  );
+                }),
+                // Spacer()
+                Obx(() {
+                  return Visibility(
+                    visible: !show.value,
+                    child: SizedBox(height: 120, width: double.infinity),
+                  );
+                }),
+
+                Column(
+                  spacing: 16,
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(bottom: 32),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: ElevatedButton(
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Color(0xFFc41014),
+                              ),
+                              onPressed: () {},
+                              child: Text(
+                                'Nearest Station',
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Text(''),
+                        ],
+                      ),
+                    ),
+                    TextField(
+                      controller: addressCont,
+                      decoration: InputDecoration(
+                        labelText: 'Address',
+                        labelStyle: TextStyle(color: Color(0xFFc41014)),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFc41014),
+                            width: 1.5,
+                          ),
+                        ),
+                        // inputDecorationTheme: InputDecorationTheme(
+                        //   filled: true,
+                        //   fillColor: Colors.white,
+                        //   contentPadding: const EdgeInsets.symmetric(
+                        //     vertical: 12,
+                        //     horizontal: 16,
+                        //   ),),
+                        //   border: OutlineInputBorder(
+                        //     borderRadius: BorderRadius.circular(12),
+                        //     borderSide: const BorderSide(
+                        //       color: Color(0xFFc41014),
+                        //       width: 1.5,
+                        //     ),
+                        //   ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFc41014),
+                            width: 1.5,
+                          ),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: const BorderSide(
+                            color: Color(0xFFc41014),
+                            width: 2,
+                          ),
                         ),
                       ),
-                      Text(""),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                    ),
+
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFc41014),
+                          ),
+                          onPressed: () {},
+                          child: Text(
+                            'Show Station',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                        Text(""),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
