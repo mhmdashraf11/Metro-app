@@ -260,10 +260,26 @@ class InputPage extends StatelessWidget {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        routes = Metro().allRoutes(
-                          entryCont.text,
-                          DestinationCont.text,
-                        );
+                        if (entryCont.value != DestinationCont.value) {
+                          routes = Metro().allRoutes(
+                            entryCont.text,
+                            DestinationCont.text,
+                          );
+                        } else {
+                          Get.snackbar(
+                            'Error',
+                            'Enter different stations',
+                            backgroundColor: Colors.red.withOpacity(0.8),
+                            colorText: Colors.white,
+                            snackPosition: SnackPosition.TOP,
+                            borderRadius: 12,
+                            margin: EdgeInsets.all(10),
+                            icon: Icon(Icons.error, color: Colors.white),
+                            shouldIconPulse: true,
+                            duration: Duration(seconds: 3),
+                            isDismissible: true,
+                          );
+                        }
                         if (routes.isNotEmpty) {
                           final minRoute = routes.minBy(
                             (route) => route.length,
