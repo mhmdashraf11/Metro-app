@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:metro2/input_page.dart';
 import 'package:metro2/welcome_page.dart';
 
 void main() {
@@ -11,9 +12,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: WelcomePage(),
-    );
+    return GetMaterialApp(debugShowCheckedModeBanner: false, home: InputPage());
   }
 }
