@@ -1,5 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:metro2/functions.dart';
 import 'full_details.dart';
@@ -94,10 +95,102 @@ class InputPage extends StatelessWidget {
     Station(name: "Wadi El Nile", lat: 30.05851, long: 31.20102),
     Station(name: "Wadi Hof", lat: 29.87923, long: 31.31354),
   ];
+  // permission = await Geolocator.checkPermission();
+  // if (permission == LocationPermission.denied) {
+  // permission = await Geolocator.requestPermission();
+  // if (permission == LocationPermission.denied) {
+  // // Permissions are denied, next time you could try
+  // // requesting permissions again (this is also where
+  // // Android's shouldShowRequestPermissionRationale
+  // // returned true. According to Android guidelines
+  // // your App should show an explanatory UI now.
+  // Get.snackbar('Error','Location permissions are denied');
+  // return;
+  // }
   List<List<String>> routes = [];
   final entryCont = TextEditingController();
   final DestinationCont = TextEditingController();
   final addressCont = TextEditingController();
+  final lat = 0.0;
+  final long = 0.0;
+  Future<Position> _determinePosition() async {
+    bool serviceEnabled;
+    LocationPermission permission;
+
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      Get.snackbar(
+        'Error',
+        'Location services are disabled.',
+        backgroundColor: Colors.red.withOpacity(0.8),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        borderRadius: 12,
+        margin: EdgeInsets.all(10),
+        icon: Icon(Icons.error, color: Colors.white),
+        shouldIconPulse: true,
+        duration: Duration(seconds: 3),
+        isDismissible: true,
+      );
+
+      return Future.error('Location services are disabled.');
+    }
+
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        Get.snackbar(
+          'Error',
+          'Location services are denied.',
+          backgroundColor: Colors.red.withOpacity(0.8),
+          colorText: Colors.white,
+          snackPosition: SnackPosition.TOP,
+          borderRadius: 12,
+          margin: EdgeInsets.all(10),
+          icon: Icon(Icons.error, color: Colors.white),
+          shouldIconPulse: true,
+          duration: Duration(seconds: 3),
+          isDismissible: true,
+        );
+        return Future.error('Location permissions are denied');
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+      // Get.snackbar('Error', '')
+      Get.snackbar(
+        'Error',
+        'Location permissions are permanently denied, we cannot request permissions.',
+        backgroundColor: Colors.red.withOpacity(0.8),
+        colorText: Colors.white,
+        snackPosition: SnackPosition.TOP,
+        borderRadius: 12,
+        margin: EdgeInsets.all(10),
+        icon: Icon(Icons.error, color: Colors.white),
+        shouldIconPulse: true,
+        duration: Duration(seconds: 3),
+        isDismissible: true,
+      );
+      return Future.error(
+        'Location permissions are permanently denied, we cannot request permissions.',
+      );
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -393,7 +486,9 @@ class InputPage extends StatelessWidget {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Color(0xFFc41014),
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                _determinePosition();
+                              },
                               child: Text(
                                 'Nearest Station',
                                 style: TextStyle(
