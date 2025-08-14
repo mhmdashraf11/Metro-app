@@ -1,7 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:metro2/full_details.dart';
 import 'package:metro2/functions.dart';
 import 'station.dart';
 
@@ -321,10 +320,7 @@ class InputPage extends StatelessWidget {
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Color(0xFFc41014),
                       ),
-                      onPressed: () {
-                        Get.to(() => const FullDetails(), arguments: routes);
-                        ;
-                      },
+                      onPressed: () {},
                       label: Text(
                         'See more',
                         style: TextStyle(color: Colors.white),
