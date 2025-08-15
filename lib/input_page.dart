@@ -1,5 +1,6 @@
 import 'package:dartx/dartx.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:metro2/functions.dart';
@@ -13,6 +14,8 @@ class InputPage extends StatelessWidget {
   final price = ''.obs;
   final count = ''.obs;
   final show = false.obs;
+  final nearestStation = ''.obs;
+  final stationFromAdd = ''.obs;
   final stations = [
     Station(name: "Abbassiya", lat: 30.07213, long: 31.28333),
     Station(name: "Abdou Pasha", lat: 30.06500, long: 31.27474),
@@ -111,9 +114,9 @@ class InputPage extends StatelessWidget {
   final entryCont = TextEditingController();
   final DestinationCont = TextEditingController();
   final addressCont = TextEditingController();
-  final lat = 0.0;
-  final long = 0.0;
-  Future<Position> _determinePosition() async {
+  // final lat = 0.0;
+  // final long = 0.0;
+  Future<Position> getPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
 
@@ -190,6 +193,21 @@ class InputPage extends StatelessWidget {
     // continue accessing the position of the device.
     return await Geolocator.getCurrentPosition();
   }
+  // [
+  //
+  // TextField(controller: cont1,),
+  // TextField(controller: cont2,),
+  // ElevatedButton(onPressed: () async {
+  // final locations=await locationFromAddress(cont1.text);
+  // print('${locations.first.latitude} : ${locations.first.longitude}');
+  //
+  // final locations2=await locationFromAddress(cont2.text);
+  // print('${locations2.first.latitude} : ${locations2.first.longitude}');
+  //
+  // final distance=Geolocator.distanceBetween(locations.first.latitude, locations.first.longitude, locations2.first.latitude, locations2.first.longitude);
+  // print('distance=${distance/1000}');
+  // }, child: Text('show'))
+  // ]
 
   @override
   Widget build(BuildContext context) {
@@ -235,6 +253,7 @@ class InputPage extends StatelessWidget {
                         label: station.name,
                       ),
                   ],
+
                   inputDecorationTheme: InputDecorationTheme(
                     filled: true,
                     fillColor: Colors.white,
@@ -473,34 +492,53 @@ class InputPage extends StatelessWidget {
 
                 Column(
                   spacing: 16,
-                  crossAxisAlignment: CrossAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(bottom: 32),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Color(0xFFc41014),
-                              ),
-                              onPressed: () {
-                                _determinePosition();
-                              },
-                              child: Text(
-                                'Nearest Station',
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.white,
-                                ),
-                              ),
-                            ),
+                    Column(
+                      // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Color(0xFFc41014),
                           ),
-                          Text(''),
-                        ],
-                      ),
+                          onPressed: () async {
+                            final pos = await getPosition();
+                            final lat = pos.latitude;
+                            final long = pos.longitude;
+                            print('${lat},${long}');
+                            nearestStation.value = stations[0].name;
+                            var min = double.infinity;
+                            for (var station in stations) {
+                              if (Geolocator.distanceBetween(
+                                    lat,
+                                    long,
+                                    station.lat,
+                                    station.long,
+                                  ) <
+                                  min) {
+                                min = Geolocator.distanceBetween(
+                                  lat,
+                                  long,
+                                  station.lat,
+                                  station.long,
+                                );
+                                nearestStation.value = station.name;
+                              }
+                            }
+                          },
+                          child: Text(
+                            'Nearest Station',
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                          ),
+                        ),
+                        // SizedBox(width: 10),
+                        Obx(() {
+                          return Text(
+                            nearestStation.value,
+                            style: TextStyle(fontSize: 20),
+                          );
+                        }),
+                      ],
                     ),
                     TextField(
                       controller: addressCont,
@@ -547,17 +585,68 @@ class InputPage extends StatelessWidget {
 
                     Row(
                       children: [
-                        ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Color(0xFFc41014),
-                          ),
-                          onPressed: () {},
-                          child: Text(
-                            'Show Station',
-                            style: TextStyle(fontSize: 20, color: Colors.white),
+                        SizedBox(
+                          width: 150,
+                          child: ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: Color(0xFFc41014),
+                            ),
+                            onPressed: () async {
+                              try {
+                                final locations = await locationFromAddress(
+                                  addressCont.text,
+                                );
+                                if (locations.isEmpty) {
+                                  Get.snackbar(
+                                    'Error',
+                                    'No location found for this address',
+                                  );
+                                  return;
+                                }
+                                final lat = locations.first.latitude;
+                                final long = locations.first.longitude;
+
+                                stationFromAdd.value = stations[0].name;
+                                var min = double.infinity;
+
+                                for (var station in stations) {
+                                  final dist = Geolocator.distanceBetween(
+                                    lat,
+                                    long,
+                                    station.lat,
+                                    station.long,
+                                  );
+                                  if (dist < min) {
+                                    min = dist;
+                                    stationFromAdd.value = station.name;
+                                  }
+                                }
+                              } catch (e) {
+                                Get.snackbar(
+                                  'Error',
+                                  'Failed to get location: $e',
+                                );
+                              }
+                            },
+                            child: Text(
+                              'Show Station',
+                              style: TextStyle(
+                                fontSize: 17,
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
-                        Text(""),
+                        Obx(() {
+                          return Expanded(
+                            child: Center(
+                              child: Text(
+                                stationFromAdd.value,
+                                style: TextStyle(fontSize: 17),
+                              ),
+                            ),
+                          );
+                        }),
                       ],
                     ),
                   ],
