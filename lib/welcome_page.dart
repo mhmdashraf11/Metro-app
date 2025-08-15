@@ -38,7 +38,7 @@ class WelcomePage extends StatelessWidget {
                   alignment: Alignment.center,
                   child: Text(
                     'Welcome to Metro guide',
-                    style: TextStyle(fontSize: 28, color: Colors.white),
+                    style: TextStyle(fontSize: 24, color: Colors.white),
                   ),
                 ),
                 Center(

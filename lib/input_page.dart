@@ -37,6 +37,7 @@ class InputPage extends StatelessWidget {
     Station(name: "El Maadi", lat: 29.96042, long: 31.25770),
     Station(name: "El Malek El Saleh", lat: 30.01785, long: 31.23103),
     Station(name: "El Marg", lat: 30.16396, long: 31.33832),
+    Station(name: 'El-Maasara', lat: 29.90624, long: 31.29952),
     Station(name: "El Matariya", lat: 30.12148, long: 31.31370),
     Station(name: "El Mounib", lat: 29.98127, long: 31.21232),
     Station(name: "El Nozha", lat: 30.12815, long: 31.36016),
@@ -50,9 +51,11 @@ class InputPage extends StatelessWidget {
     Station(name: "Faisal", lat: 30.01723, long: 31.20397),
     Station(name: "Gamat El Dowal", lat: 30.05029, long: 31.19896),
     Station(name: "Ghamra", lat: 30.06918, long: 31.26461),
+    Station(name: "Giza", lat: 30.01073, long: 31.20708),
     Station(name: "Hadayek El Maadi", lat: 29.97040, long: 31.25051),
     Station(name: "Hadayek El Zaitoun", lat: 30.10602, long: 31.31047),
     Station(name: "Hadayek Helwan", lat: 29.89743, long: 31.30409),
+    Station(name: 'Hamamat El Qobba', lat: 30.09133, long: 31.29891),
     Station(name: "Haroun", lat: 30.10154, long: 31.33293),
     Station(name: "Heliopolis", lat: 30.10855, long: 31.33828),
     Station(name: "Helmeyet El Zeitoun", lat: 30.11399, long: 31.31413),
@@ -62,6 +65,7 @@ class InputPage extends StatelessWidget {
     Station(name: "Imbaba", lat: 30.07602, long: 31.20746),
     Station(name: "Kit Kat", lat: 30.06672, long: 31.21301),
     Station(name: "Khalafawy", lat: 30.09740, long: 31.24547),
+    Station(name: 'Kobry El Qobba', lat: 30.08732, long: 31.29409),
     Station(name: "Koliet El Zeraa", lat: 30.11386, long: 31.24865),
     Station(name: "Kolleyet El Banat", lat: 30.08358, long: 31.32883),
     Station(name: "Kozzika", lat: 29.93644, long: 31.28178),
@@ -525,6 +529,7 @@ class InputPage extends StatelessWidget {
                                 nearestStation.value = station.name;
                               }
                             }
+                            entryCont.text = nearestStation.value;
                           },
                           child: Text(
                             'Nearest Station',
@@ -621,17 +626,15 @@ class InputPage extends StatelessWidget {
                                     stationFromAdd.value = station.name;
                                   }
                                 }
+                                DestinationCont.text = stationFromAdd.value;
                               } catch (e) {
-                                Get.snackbar(
-                                  'Error',
-                                  'Failed to get location: $e',
-                                );
+                                Get.snackbar('Error', 'Failed to get location');
                               }
                             },
                             child: Text(
                               'Show Station',
                               style: TextStyle(
-                                fontSize: 17,
+                                // fontSize: 17,
                                 color: Colors.white,
                               ),
                             ),

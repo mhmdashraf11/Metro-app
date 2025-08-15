@@ -5,7 +5,7 @@ class Metro {
     "Helwan University",
     "Wadi Hof",
     "Hadayek Helwan",
-    "El-Masara",
+    "El-Maasara",
     "Tora El-Asmant",
     "Kozzika",
     "Tora El-Balad",
@@ -25,8 +25,8 @@ class Metro {
     "Ghamra",
     "El Demerdash",
     "Manshiet El Sadr",
-    "Kobri El Qobba",
-    "Hammamat El Qobba",
+    "Kobry El Qobba",
+    "Hamamat El Qobba",
     "Saray El Qobba",
     "Hadayek El Zaitoun",
     "Helmeyet El Zeitoun",
@@ -91,6 +91,7 @@ class Metro {
     "Ring Road",
     "Rod El Farag Corridor",
   ];
+
   final line4 = [
     "Kit Kat",
     "Tawfikia",
@@ -108,6 +109,7 @@ class Metro {
     'Kit Kat',
     'Cairo University',
   ];
+
   List<String> _lineById(int id) {
     switch (id) {
       case 1:
@@ -127,89 +129,71 @@ class Metro {
     List<int> linesOfPoint1,
     List<int> linesOfPoint2,
   ) {
-    List<String> possibleInterchangePoints = [];
-    for (int i = 0; i < linesOfPoint1.length; i++) {
-      for (int j = 0; j < linesOfPoint2.length; j++) {
-        if ((linesOfPoint1[i] == 1 && linesOfPoint2[j] == 2) ||
-            (linesOfPoint1[i] == 2) && linesOfPoint2[j] == 1)
-          possibleInterchangePoints.addAll(['El Shohadaa', 'Sadat']);
-        else if ((linesOfPoint1[i] == 1 && linesOfPoint2[j] == 3) ||
-            (linesOfPoint1[i] == 3) && linesOfPoint2[j] == 1)
-          possibleInterchangePoints.add('Nasser');
-        else if ((linesOfPoint1[i] == 2 && linesOfPoint2[j] == 3) ||
-            (linesOfPoint1[i] == 3) && linesOfPoint2[j] == 2)
-          possibleInterchangePoints.addAll(['Attaba']);
-        else if ((linesOfPoint1[i] == 2 && linesOfPoint2[j] == 4) ||
-            (linesOfPoint1[i] == 4) && linesOfPoint2[j] == 2)
-          possibleInterchangePoints.addAll(['Cairo University']);
-        else if ((linesOfPoint1[i] == 3 && linesOfPoint2[j] == 4) ||
-            (linesOfPoint1[i] == 4) && linesOfPoint2[j] == 3)
-          possibleInterchangePoints.addAll(['Kit Kat']);
+    List<String> xs = [];
+    for (final a in linesOfPoint1) {
+      for (final b in linesOfPoint2) {
+        if ((a == 1 && b == 2) || (a == 2 && b == 1)) {
+          xs.addAll(['El Shohadaa', 'Sadat']);
+        } else if ((a == 1 && b == 3) || (a == 3 && b == 1)) {
+          xs.add('Nasser');
+        } else if ((a == 2 && b == 3) || (a == 3 && b == 2)) {
+          xs.add('Attaba');
+        } else if ((a == 2 && b == 4) || (a == 4 && b == 2)) {
+          xs.add('Cairo University');
+        } else if ((a == 3 && b == 4) || (a == 4 && b == 3)) {
+          xs.add('Kit Kat');
+        }
       }
     }
-    possibleInterchangePoints = possibleInterchangePoints.toSet().toList();
-    return possibleInterchangePoints;
+    return xs.toSet().toList();
   }
 
-  bool isInterchangePoint(String point) {
-    if (interchangePoints.contains(point))
-      return true;
-    else
-      return false;
+  bool isInterchangePoint(String point) => interchangePoints.contains(point);
+
+  List<String> getCommonLine(String p1, String p2) {
+    if (line1.contains(p1) && line1.contains(p2)) return line1;
+    if (line2.contains(p1) && line2.contains(p2)) return line2;
+    if (line3.contains(p1) && line3.contains(p2)) return line3;
+    if (line4.contains(p1) && line4.contains(p2)) return line4;
+    return [];
   }
 
-  List<String> getCommonLine(String point1, String point2) {
-    if (line1.contains(point1) && line1.contains(point2)) {
-      return line1;
-    } else if (line2.contains(point1) && line2.contains(point2)) {
-      return line2;
-    } else if (line3.contains(point1) && line3.contains(point2)) {
-      return line3;
-    } else if (line4.contains(point1) && line4.contains(point2)) {
-      return line4;
-    } else
-      return [];
+  bool areSameLine(String a, String b) =>
+      (line1.contains(a) && line1.contains(b)) ||
+      (line2.contains(a) && line2.contains(b)) ||
+      (line3.contains(a) && line3.contains(b)) ||
+      (line4.contains(a) && line4.contains(b));
+
+  String getDirection(String startpoint, String endpoint) {
+    final line = getCommonLine(startpoint, endpoint);
+    return line.indexOf(startpoint) < line.indexOf(endpoint)
+        ? line.last
+        : line.first;
+  }
+
+  String? tryGetDirection(String startpoint, String endpoint) {
+    final line = getCommonLine(startpoint, endpoint);
+    if (line.isEmpty) return null;
+    return getDirection(startpoint, endpoint);
   }
 
   List<int> getLines(String point) {
-    List<int> lines = [];
-    if (line1.contains(point)) lines.add(1);
-    if (line2.contains(point)) lines.add(2);
-    if (line3.contains(point)) lines.add(3);
-    if (line4.contains(point)) lines.add(4);
-    return lines;
+    final ls = <int>[];
+    if (line1.contains(point)) ls.add(1);
+    if (line2.contains(point)) ls.add(2);
+    if (line3.contains(point)) ls.add(3);
+    if (line4.contains(point)) ls.add(4);
+    return ls;
   }
 
-  bool areSameLine(String point1, String point2) {
-    if (line1.contains(point1) && line1.contains(point2) ||
-        line2.contains(point1) && line2.contains(point2) ||
-        line3.contains(point1) && line3.contains(point2) ||
-        line4.contains(point1) && line4.contains(point2))
-      return true;
-    else
-      return false;
-  }
-
-  String getDirection(String startpoint, String endpoint) {
-    final commonLine = getCommonLine(startpoint, endpoint);
-    if (commonLine.indexOf(startpoint) < commonLine.indexOf(endpoint))
-      return commonLine.last;
-    else
-      return commonLine.first;
-  }
-
-  List<String> printSameLine(String startpoint, String endpoint) {
-    List<String> tempLine = getCommonLine(startpoint, endpoint);
-    if (tempLine.indexOf(startpoint) < tempLine.indexOf(endpoint)) {
-      return tempLine.sublist(
-        tempLine.indexOf(startpoint),
-        tempLine.indexOf(endpoint) + 1,
-      );
+  List<String> printSameLine(String start, String end) {
+    final ln = getCommonLine(start, end);
+    if (ln.isEmpty) return [];
+    final i = ln.indexOf(start), j = ln.indexOf(end);
+    if (i < j) {
+      return ln.sublist(i, j + 1);
     } else {
-      return tempLine
-          .sublist(tempLine.indexOf(endpoint), tempLine.indexOf(startpoint) + 1)
-          .reversed
-          .toList();
+      return ln.sublist(j, i + 1).reversed.toList();
     }
   }
 
@@ -238,8 +222,10 @@ class Metro {
 
     final routes = <List<String>>[];
 
+    // one-interchange routes
     routes.addAll(printNotSameLine(start, end));
 
+    // two-interchange routes
     final startLs = getLines(start);
     final endLs = getLines(end);
 
@@ -269,13 +255,14 @@ class Metro {
         }
       }
     }
+
+    // deduplicate
     final seen = <String>{};
     final unique = <List<String>>[];
     for (final r in routes) {
       final key = r.join('->');
       if (seen.add(key)) unique.add(r);
     }
-
     unique.sort((a, b) => a.length.compareTo(b.length));
     return unique;
   }
