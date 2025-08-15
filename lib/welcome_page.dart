@@ -20,8 +20,8 @@ class WelcomePage extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.only(bottom: 128),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              // mainAxisAlignment: MainAxisAlignment.end,
+              // crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
                   child: Center(

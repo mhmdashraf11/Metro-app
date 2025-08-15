@@ -129,23 +129,28 @@ class Metro {
     List<int> linesOfPoint1,
     List<int> linesOfPoint2,
   ) {
-    List<String> xs = [];
-    for (final a in linesOfPoint1) {
-      for (final b in linesOfPoint2) {
-        if ((a == 1 && b == 2) || (a == 2 && b == 1)) {
-          xs.addAll(['El Shohadaa', 'Sadat']);
-        } else if ((a == 1 && b == 3) || (a == 3 && b == 1)) {
-          xs.add('Nasser');
-        } else if ((a == 2 && b == 3) || (a == 3 && b == 2)) {
-          xs.add('Attaba');
-        } else if ((a == 2 && b == 4) || (a == 4 && b == 2)) {
-          xs.add('Cairo University');
-        } else if ((a == 3 && b == 4) || (a == 4 && b == 3)) {
-          xs.add('Kit Kat');
+    List<String> interchangePoints = [];
+    for (final linesOfPoint1 in linesOfPoint1) {
+      for (final linesOfPoint2 in linesOfPoint2) {
+        if ((linesOfPoint1 == 1 && linesOfPoint2 == 2) ||
+            (linesOfPoint1 == 2 && linesOfPoint2 == 1)) {
+          interchangePoints.addAll(['El Shohadaa', 'Sadat']);
+        } else if ((linesOfPoint1 == 1 && linesOfPoint2 == 3) ||
+            (linesOfPoint1 == 3 && linesOfPoint2 == 1)) {
+          interchangePoints.add('Nasser');
+        } else if ((linesOfPoint1 == 2 && linesOfPoint2 == 3) ||
+            (linesOfPoint1 == 3 && linesOfPoint2 == 2)) {
+          interchangePoints.add('Attaba');
+        } else if ((linesOfPoint1 == 2 && linesOfPoint2 == 4) ||
+            (linesOfPoint1 == 4 && linesOfPoint2 == 2)) {
+          interchangePoints.add('Cairo University');
+        } else if ((linesOfPoint1 == 3 && linesOfPoint2 == 4) ||
+            (linesOfPoint1 == 4 && linesOfPoint2 == 3)) {
+          interchangePoints.add('Kit Kat');
         }
       }
     }
-    return xs.toSet().toList();
+    return interchangePoints.toSet().toList();
   }
 
   bool isInterchangePoint(String point) => interchangePoints.contains(point);
@@ -158,13 +163,14 @@ class Metro {
     return [];
   }
 
-  bool areSameLine(String a, String b) =>
-      (line1.contains(a) && line1.contains(b)) ||
-      (line2.contains(a) && line2.contains(b)) ||
-      (line3.contains(a) && line3.contains(b)) ||
-      (line4.contains(a) && line4.contains(b));
+  bool areSameLine(String p1, String p2) =>
+      (line1.contains(p1) && line1.contains(p2)) ||
+      (line2.contains(p1) && line2.contains(p2)) ||
+      (line3.contains(p1) && line3.contains(p2)) ||
+      (line4.contains(p1) && line4.contains(p2));
 
   String getDirection(String startpoint, String endpoint) {
+    // common lines only
     final line = getCommonLine(startpoint, endpoint);
     return line.indexOf(startpoint) < line.indexOf(endpoint)
         ? line.last
@@ -172,52 +178,54 @@ class Metro {
   }
 
   String? tryGetDirection(String startpoint, String endpoint) {
+    // in case not same line "for safety"
     final line = getCommonLine(startpoint, endpoint);
     if (line.isEmpty) return null;
     return getDirection(startpoint, endpoint);
   }
 
   List<int> getLines(String point) {
-    final ls = <int>[];
-    if (line1.contains(point)) ls.add(1);
-    if (line2.contains(point)) ls.add(2);
-    if (line3.contains(point)) ls.add(3);
-    if (line4.contains(point)) ls.add(4);
-    return ls;
+    final lines = <int>[];
+    if (line1.contains(point)) lines.add(1);
+    if (line2.contains(point)) lines.add(2);
+    if (line3.contains(point)) lines.add(3);
+    if (line4.contains(point)) lines.add(4);
+    return lines;
   }
 
   List<String> printSameLine(String start, String end) {
-    final ln = getCommonLine(start, end);
-    if (ln.isEmpty) return [];
-    final i = ln.indexOf(start), j = ln.indexOf(end);
+    final commonLine = getCommonLine(start, end);
+    if (commonLine.isEmpty) return [];
+    final i = commonLine.indexOf(start), j = commonLine.indexOf(end);
     if (i < j) {
-      return ln.sublist(i, j + 1);
+      return commonLine.sublist(i, j + 1);
     } else {
-      return ln.sublist(j, i + 1).reversed.toList();
+      return commonLine.sublist(j, i + 1).reversed.toList();
     }
   }
 
   List<List<String>> printNotSameLine(String start, String end) {
-    final xs = getInterchangePoints(getLines(start), getLines(end));
+    final interchangePoints = getInterchangePoints(
+      getLines(start),
+      getLines(end),
+    );
     final routes = <List<String>>[];
-    for (final x in xs) {
-      final p1 = printSameLine(start, x);
-      final p2 = printSameLine(x, end);
-      if (p1.isEmpty || p2.isEmpty) continue;
-      final r = <String>[];
-      r.addAll(p1);
-      r.removeLast();
-      r.addAll(p2);
-      routes.add(r);
+    for (final interchangePoint in interchangePoints) {
+      final route1 = printSameLine(start, interchangePoint);
+      final route2 = printSameLine(interchangePoint, end);
+      if (route1.isEmpty || route2.isEmpty) continue;
+      final route = <String>[];
+      route.addAll(route1);
+      route.removeLast();
+      route.addAll(route2);
+      routes.add(route);
     }
     return routes;
   }
 
   List<List<String>> allRoutes(String start, String end) {
-    for (final ln in [line1, line2, line3, line4]) {
-      if (ln.contains(start) && ln.contains(end)) {
-        return [printSameLine(start, end)];
-      }
+    if (areSameLine(start, end)) {
+      return [printSameLine(start, end)];
     }
 
     final routes = <List<String>>[];
@@ -226,51 +234,55 @@ class Metro {
     routes.addAll(printNotSameLine(start, end));
 
     // two-interchange routes
-    final startLs = getLines(start);
-    final endLs = getLines(end);
+    final LinesOfStartPoint = getLines(start);
+    final LinesOfEndPoint = getLines(end);
 
     for (var mid = 1; mid <= 4; mid++) {
-      final xs = getInterchangePoints(startLs, [mid]);
-      final ys = getInterchangePoints([mid], endLs);
-      if (xs.isEmpty || ys.isEmpty) continue;
+      // max 16 interation
+      final interchangePoints1 = getInterchangePoints(LinesOfStartPoint, [mid]);
+      final interchangePoints2 = getInterchangePoints([mid], LinesOfEndPoint);
+      if (interchangePoints1.isEmpty || interchangePoints2.isEmpty) continue;
 
-      for (final x in xs) {
-        for (final y in ys) {
+      for (final interchange1 in interchangePoints1) {
+        for (final interchange2 in interchangePoints2) {
           final midLine = _lineById(mid);
-          if (!midLine.contains(x) || !midLine.contains(y)) continue;
+          if (!midLine.contains(interchange1) ||
+              !midLine.contains(interchange2))
+            continue;
 
-          final a = printSameLine(start, x);
-          final b = printSameLine(x, y);
-          final c = printSameLine(y, end);
+          final a = printSameLine(start, interchange1);
+          final b = printSameLine(interchange1, interchange2);
+          final c = printSameLine(interchange2, end);
 
           if (a.isEmpty || b.isEmpty || c.isEmpty) continue;
 
-          final r = <String>[];
-          r.addAll(a);
-          r.removeLast();
-          r.addAll(b);
-          r.removeLast();
-          r.addAll(c);
-          routes.add(r);
+          final route = <String>[];
+          route.addAll(a);
+          route.removeLast();
+          route.addAll(b);
+          route.removeLast();
+          route.addAll(c);
+          routes.add(route);
         }
       }
     }
 
-    // deduplicate
+    // Remove duplicates
     final seen = <String>{};
     final unique = <List<String>>[];
     for (final r in routes) {
-      final key = r.join('->');
-      if (seen.add(key)) unique.add(r);
+      final routeAsString = r.join('->'); // to make the comparison possible
+      if (seen.add(routeAsString)) unique.add(r);
     }
     unique.sort((a, b) => a.length.compareTo(b.length));
     return unique;
   }
 
-  int stationCount(List<String> r) => r.length <= 1 ? 0 : r.length - 1;
-  int expectedTimeMin(List<String> r) => stationCount(r) * 2;
-  int fareEGP(List<String> r) {
-    final s = stationCount(r);
+  int stationCount(List<String> route) =>
+      route.length <= 1 ? 0 : route.length - 1;
+  int expectedTimeMin(List<String> route) => stationCount(route) * 2;
+  int Price(List<String> route) {
+    final s = stationCount(route);
     if (s <= 9) return 8;
     if (s <= 16) return 10;
     if (s <= 23) return 15;

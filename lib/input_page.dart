@@ -102,24 +102,12 @@ class InputPage extends StatelessWidget {
     Station(name: "Wadi El Nile", lat: 30.05851, long: 31.20102),
     Station(name: "Wadi Hof", lat: 29.87923, long: 31.31354),
   ];
-  // permission = await Geolocator.checkPermission();
-  // if (permission == LocationPermission.denied) {
-  // permission = await Geolocator.requestPermission();
-  // if (permission == LocationPermission.denied) {
-  // // Permissions are denied, next time you could try
-  // // requesting permissions again (this is also where
-  // // Android's shouldShowRequestPermissionRationale
-  // // returned true. According to Android guidelines
-  // // your App should show an explanatory UI now.
-  // Get.snackbar('Error','Location permissions are denied');
-  // return;
-  // }
+
   List<List<String>> routes = [];
   final entryCont = TextEditingController();
   final DestinationCont = TextEditingController();
   final addressCont = TextEditingController();
-  // final lat = 0.0;
-  // final long = 0.0;
+
   Future<Position> getPosition() async {
     bool serviceEnabled;
     LocationPermission permission;
@@ -133,7 +121,7 @@ class InputPage extends StatelessWidget {
       Get.snackbar(
         'Error',
         'Location services are disabled.',
-        backgroundColor: Colors.red.withOpacity(0.8),
+        backgroundColor: Colors.red.withValues(alpha: 0.8),
         colorText: Colors.white,
         snackPosition: SnackPosition.TOP,
         borderRadius: 12,
@@ -288,8 +276,8 @@ class InputPage extends StatelessWidget {
                     ),
                   ),
                   menuStyle: MenuStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all(
+                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+                    shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(
@@ -358,13 +346,13 @@ class InputPage extends StatelessWidget {
                     ),
                   ),
                   menuStyle: MenuStyle(
-                    backgroundColor: MaterialStateProperty.all(Colors.white),
-                    shape: MaterialStateProperty.all(
+                    backgroundColor: WidgetStatePropertyAll(Colors.white),
+                    shape: WidgetStatePropertyAll(
                       RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12),
                         side: const BorderSide(
                           color: Color(0xFFc41014),
-                          width: 3,
+                          width: 1.5,
                         ),
                       ),
                     ),
@@ -405,7 +393,7 @@ class InputPage extends StatelessWidget {
                               'Number of stations : ${Metro().stationCount(minRoute)}';
                           time.value =
                               'Estimated time : ${Metro().expectedTimeMin(minRoute)}';
-                          price.value = 'Price : ${Metro().fareEGP(minRoute)}';
+                          price.value = 'Price : ${Metro().Price(minRoute)}';
                           show.value = true;
                         }
                       },
@@ -435,7 +423,7 @@ class InputPage extends StatelessWidget {
                               children: [
                                 Icon(Icons.train),
                                 Text(
-                                  count.value,
+                                  ' ${count.value}',
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
@@ -445,7 +433,7 @@ class InputPage extends StatelessWidget {
                               children: [
                                 Icon(Icons.timer),
                                 Text(
-                                  time.value,
+                                  ' ${time.value}',
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
@@ -455,7 +443,7 @@ class InputPage extends StatelessWidget {
                               children: [
                                 Icon(Icons.attach_money),
                                 Text(
-                                  price.value,
+                                  ' ${price.value}',
                                   style: TextStyle(fontSize: 20),
                                 ),
                               ],
@@ -557,20 +545,6 @@ class InputPage extends StatelessWidget {
                             width: 1.5,
                           ),
                         ),
-                        // inputDecorationTheme: InputDecorationTheme(
-                        //   filled: true,
-                        //   fillColor: Colors.white,
-                        //   contentPadding: const EdgeInsets.symmetric(
-                        //     vertical: 12,
-                        //     horizontal: 16,
-                        //   ),),
-                        //   border: OutlineInputBorder(
-                        //     borderRadius: BorderRadius.circular(12),
-                        //     borderSide: const BorderSide(
-                        //       color: Color(0xFFc41014),
-                        //       width: 1.5,
-                        //     ),
-                        //   ),
                         enabledBorder: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
                           borderSide: const BorderSide(

@@ -17,7 +17,7 @@ class FullDetails extends StatelessWidget {
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
-            fontSize: 26,
+            fontSize: 24,
           ),
         ),
         backgroundColor: const Color(0xFFc41014),
@@ -40,10 +40,8 @@ class FullDetails extends StatelessWidget {
             final lineBefore = metro.getCommonLine(route[segStart], cur);
             final lineAfter = metro.getCommonLine(cur, next);
 
-            // If either is empty, we can't make a decision; skip until we have a valid pair.
             if (lineBefore.isEmpty || lineAfter.isEmpty) continue;
 
-            // A real line change only if line references differ (or contents differ).
             final changed =
                 !identical(lineBefore, lineAfter) &&
                 !(lineBefore.length == lineAfter.length &&
@@ -53,16 +51,15 @@ class FullDetails extends StatelessWidget {
             if (changed) {
               final dir = metro.tryGetDirection(route[segStart], cur);
               if (dir != null && segStart != idx) {
-                directions.add('${route[segStart]} → $dir');
+                directions.add('${route[segStart]}  ($dir Direction)');
                 segStart = idx; // start next segment at the interchange station
               }
             }
           }
 
-          // Close the final segment
           final lastDir = metro.tryGetDirection(route[segStart], route.last);
           if (lastDir != null) {
-            directions.add('${route[segStart]} → $lastDir');
+            directions.add('${route[segStart]}  ($lastDir Direction)');
           }
 
           return Card(
@@ -70,7 +67,7 @@ class FullDetails extends StatelessWidget {
             child: ExpansionTile(
               title: Text(title),
               subtitle: Text(
-                '${route.length} stops • ${metro.expectedTimeMin(route)} min • ${metro.fareEGP(route)} EGP',
+                '${route.length} stops • ${metro.expectedTimeMin(route)} min • ${metro.Price(route)} EGP',
               ),
               childrenPadding: const EdgeInsets.symmetric(
                 horizontal: 12,
@@ -88,7 +85,6 @@ class FullDetails extends StatelessWidget {
                 ),
                 const Divider(),
 
-                // Only show "Directions" section if there is at least one (i.e., at least one segment)
                 if (directions.isNotEmpty)
                   Padding(
                     padding: const EdgeInsets.only(bottom: 8.0),
@@ -100,15 +96,15 @@ class FullDetails extends StatelessWidget {
                           style: TextStyle(fontWeight: FontWeight.w700),
                         ),
                         const SizedBox(height: 6),
-                        ...directions.map(
-                          (d) => Padding(
+
+                        for (int i = 0; i < directions.length; i++)
+                          Padding(
                             padding: const EdgeInsets.symmetric(vertical: 2.0),
                             child: Text(
-                              '• $d',
-                              style: TextStyle(color: Color(0xFFc41014)),
+                              '${i + 1}. ${directions[i]}',
+                              style: const TextStyle(color: Color(0xFFc41014)),
                             ),
                           ),
-                        ),
                       ],
                     ),
                   ),
