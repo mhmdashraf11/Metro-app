@@ -8,8 +8,9 @@ plugins {
 android {
     namespace = "com.example.metro2"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "29.0.13846066" //bassam
-//    ndkVersion = "29.0.13599879" //mohamed
+//    compileSdk = 36
+//    ndkVersion = "29.0.13846066" //bassam
+    ndkVersion = "29.0.13599879" //mohamed
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11

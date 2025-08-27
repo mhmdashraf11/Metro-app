@@ -1,4 +1,14 @@
+import 'dart:ffi';
+
+import 'package:floor/floor.dart';
+
+@Entity(tableName: 'stations')
 class Station {
-  final name, lat, long;
-  Station({required this.name, required this.lat, required this.long});
+  @PrimaryKey(autoGenerate: true)
+  final int? id;
+
+  final String name;
+  final double? latitude, longitude;
+
+  Station({this.id, required this.name, this.latitude, this.longitude});
 }
